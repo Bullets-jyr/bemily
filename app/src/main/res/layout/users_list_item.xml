@@ -41,13 +41,13 @@
         android:textColor="@color/black"
         android:textSize="16dp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/html_url"
+        app:layout_constraintBottom_toTopOf="@id/htmlUrl"
         app:layout_constraintStart_toEndOf="@id/circleImageView"
         app:layout_constraintTop_toTopOf="@id/circleImageView"
         tools:text="android" />
 
     <TextView
-        android:id="@+id/html_url"
+        android:id="@+id/htmlUrl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/black"

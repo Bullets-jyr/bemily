@@ -35,6 +35,8 @@ class UsersAdapter(private val context: Context) : ListAdapter<UsersItem, UsersA
         init {
             binding.list.setOnClickListener {
                 usersItemSelectEventListener.usersItemSelect(usersItem)
+                val action = UserListFragmentDirections.actionUserListFragmentToUserDetailFragment(usersItem, usersItem.login)
+                it.findNavController().navigate(action)
             }
         }
 
