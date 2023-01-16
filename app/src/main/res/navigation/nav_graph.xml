@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/userListFragment">
+    app:startDestination="@id/usersListFragment">
     <fragment
-        android:id="@+id/userListFragment"
-        android:name="kr.co.befamily.bemily.frgment.UserListFragment"
+        android:id="@+id/usersListFragment"
+        android:name="kr.co.befamily.bemily.frgment.UsersListFragment"
         android:label="Github Users"
-        tools:layout="@layout/fragment_user_list" >
+        tools:layout="@layout/fragment_users_list" >
         <action
             android:id="@+id/action_userListFragment_to_userDetailFragment"
             app:destination="@id/userDetailFragment" />
@@ -19,8 +19,8 @@
         android:label="{login}"
         tools:layout="@layout/fragment_user_detail" >
         <argument
-            android:name="usersItem"
-            app:argType="kr.co.befamily.bemily.network.vo.UsersItem" />
+            android:name="usersEntity"
+            app:argType="kr.co.befamily.bemily.db.entity.UsersEntity" />
         <argument
             android:name="login"
             app:argType="string" />

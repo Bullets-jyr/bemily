@@ -7,7 +7,7 @@ import kotlinx.android.parcel.Parcelize
 
 
 @Parcelize
-data class UsersItem(
+data class UsersItemVo(
     @SerializedName("login")
     val login: String,
     @SerializedName("id")

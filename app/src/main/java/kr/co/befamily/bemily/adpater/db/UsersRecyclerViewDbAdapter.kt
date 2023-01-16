@@ -1,22 +1,21 @@
-package kr.co.befamily.bemily.adpater
+package kr.co.befamily.bemily.adpater.db
 
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.bumptech.glide.Glide
-import kr.co.befamily.bemily.R
 import kr.co.befamily.bemily.databinding.UsersListItemBinding
-import kr.co.befamily.bemily.frgment.UserListFragmentDirections
-import kr.co.befamily.bemily.network.vo.UsersItem
+import kr.co.befamily.bemily.db.entity.UsersEntity
+import kr.co.befamily.bemily.frgment.UsersListFragmentDirections
+import kr.co.befamily.bemily.network.vo.UsersItemVo
 
-class UsersAdapter(private val context: Context) : ListAdapter<UsersItem, UsersAdapter.UsersViewHolder>(UsersListDiffCallback()) {
+class UsersRecyclerViewDbAdapter(private val context: Context) : ListAdapter<UsersEntity, UsersRecyclerViewDbAdapter.UsersViewHolder>(UsersListDiffCallback()) {
     private lateinit var usersItemSelectEventListener: UsersItemSelectEventListener
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UsersViewHolder {
@@ -30,27 +29,27 @@ class UsersAdapter(private val context: Context) : ListAdapter<UsersItem, UsersA
     }
 
     inner class UsersViewHolder(private val binding: UsersListItemBinding) : ViewHolder(binding.root) {
-        private lateinit var usersItem: UsersItem
+        private lateinit var usersEntity: UsersEntity
 
         init {
             binding.list.setOnClickListener {
-                usersItemSelectEventListener.usersItemSelect(usersItem)
-                val action = UserListFragmentDirections.actionUserListFragmentToUserDetailFragment(usersItem, usersItem.login)
+                usersItemSelectEventListener.usersItemSelect(usersEntity)
+                val action = UsersListFragmentDirections.actionUserListFragmentToUserDetailFragment(usersEntity, usersEntity.login)
                 it.findNavController().navigate(action)
             }
         }
 
-        fun bind(usersItem: UsersItem, position: Int) {
-            this.usersItem = usersItem
+        fun bind(usersEntity: UsersEntity, position: Int) {
+            this.usersEntity = usersEntity
 
             if (position == 0) binding.header.visibility = View.VISIBLE else binding.header.visibility = View.GONE
 
             Glide.with(context)
-                .load(usersItem.avatarUrl)
+                .load(usersEntity.avatar_url)
                 .into(binding.circleImageView)
 
-            binding.login.text = usersItem.login
-            binding.htmlUrl.text = usersItem.htmlUrl
+            binding.login.text = usersEntity.login
+            binding.htmlUrl.text = usersEntity.html_url
         }
     }
 
@@ -59,16 +58,16 @@ class UsersAdapter(private val context: Context) : ListAdapter<UsersItem, UsersA
     }
 
     interface UsersItemSelectEventListener {
-        fun usersItemSelect(usersItem: UsersItem)
+        fun usersItemSelect(usersEntity: UsersEntity)
     }
 }
 
-class UsersListDiffCallback : DiffUtil.ItemCallback<UsersItem>() {
-    override fun areItemsTheSame(oldItem: UsersItem, newItem: UsersItem): Boolean {
+class UsersListDiffCallback : DiffUtil.ItemCallback<UsersEntity>() {
+    override fun areItemsTheSame(oldItem: UsersEntity, newItem: UsersEntity): Boolean {
         return oldItem.id == newItem.id
     }
 
-    override fun areContentsTheSame(oldItem: UsersItem, newItem: UsersItem): Boolean {
+    override fun areContentsTheSame(oldItem: UsersEntity, newItem: UsersEntity): Boolean {
         return oldItem == newItem
     }
 }
