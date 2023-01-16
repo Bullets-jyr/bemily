@@ -15,4 +15,7 @@ interface UsersDao {
 
     @Query("SELECT * FROM users")
     fun getAllUsers(): LiveData<List<UsersEntity>>
+
+    @Query("UPDATE users SET is_like =:isLike WHERE login =:login")
+    suspend fun updateIsLike(isLike: Boolean, login: String)
 }

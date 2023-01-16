@@ -30,11 +30,11 @@ class UsersListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val usersApi = RetrofitInstance.getRetrofitInstance().create(UsersApi::class.java)
-        val dao = UsersDatabase.getInstance(requireActivity()).usersDao
-        val usersRepository = UsersRepository(usersApi, dao)
+        val usersDao = UsersDatabase.getInstance(requireActivity()).usersDao
+        val usersRepository = UsersRepository(usersApi, usersDao)
         val usersViewModelFactory = UsersViewModelFactory(usersRepository)
         usersViewModel = ViewModelProvider(requireActivity(), usersViewModelFactory)[UsersViewModel::class.java]
-        usersRecyclerViewDbAdapter = UsersRecyclerViewDbAdapter(requireActivity())
+        usersRecyclerViewDbAdapter = UsersRecyclerViewDbAdapter(requireActivity(), usersDao)
         binding = FragmentUsersListBinding.inflate(inflater, container, false)
         return binding.root
     }

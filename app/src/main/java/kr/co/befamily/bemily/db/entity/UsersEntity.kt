@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -46,6 +47,8 @@ data class UsersEntity(
     val type: String,
     @ColumnInfo(name = "site_admin")
     val site_admin: Boolean,
+    @ColumnInfo(name = "score")
+    val score: Double,
     @ColumnInfo(name = "is_like")
-    val is_like: Boolean
+    val is_like: Boolean = false
 ) : Parcelable
