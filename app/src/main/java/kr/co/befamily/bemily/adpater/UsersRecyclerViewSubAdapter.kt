@@ -1,7 +1,6 @@
 package kr.co.befamily.bemily.adpater
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.navigation.findNavController
@@ -9,7 +8,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.bumptech.glide.Glide
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kr.co.befamily.bemily.R
 import kr.co.befamily.bemily.databinding.UsersListSubItemBinding
@@ -44,9 +44,9 @@ class UsersRecyclerViewSubAdapter(private val context: Context, private val user
                     binding.isLike.setImageResource(R.drawable.baseline_favorite_false_24)
                 }
 
-//                usersItemSelectEventListener.usersItemSelect(usersEntity)
+                usersItemSelectEventListener.usersItemSelect(usersEntity)
 
-                GlobalScope.launch {
+                CoroutineScope(Dispatchers.IO).launch {
                     usersDao.updateIsLike(!usersEntity.is_like, usersEntity.login)
                 }
             }

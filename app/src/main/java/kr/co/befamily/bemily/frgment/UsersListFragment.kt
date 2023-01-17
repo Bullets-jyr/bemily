@@ -1,14 +1,12 @@
 package kr.co.befamily.bemily.frgment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import kr.co.befamily.bemily.adpater.UsersRecyclerViewMainAdapter
 import kr.co.befamily.bemily.databinding.FragmentUsersListBinding
@@ -43,12 +41,7 @@ class UsersListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         usersViewModel.reqUsersList("android")
-        usersViewModel.usersListLiveData.observe(viewLifecycleOwner, Observer {
-//            usersRecyclerViewAdapter.submitList(it)
-        })
-
         usersViewModel.usersLiveData.observe(viewLifecycleOwner, Observer {
-            Log.e("usersLiveData", "$it")
             val usersGroupList = mutableListOf<UsersGroupVo>()
             val usersFavoriteGroupList = mutableListOf<UsersEntity>()
             val usersHeaderGroupList = mutableListOf<UsersEntity>()
@@ -69,7 +62,6 @@ class UsersListFragment : Fragment() {
                 usersGroupList.add(UsersGroupVo("Normal", usersHeaderGroupList))
             }
 
-            Log.e("usersLiveData", "$usersGroupList")
             usersRecyclerViewMainAdapter.submitList(usersGroupList)
         })
 

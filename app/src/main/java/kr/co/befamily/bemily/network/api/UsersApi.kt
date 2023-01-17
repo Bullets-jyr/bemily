@@ -9,8 +9,5 @@ import retrofit2.http.Query
 interface UsersApi {
 
     @GET("/users")
-    fun getUsersIntoVo(@Query("q") q: String): Call<UsersVo>
-
-    @GET("/users")
     fun getUsersIntoEntity(@Query("q") q: String): Call<List<UsersEntity>>
 }

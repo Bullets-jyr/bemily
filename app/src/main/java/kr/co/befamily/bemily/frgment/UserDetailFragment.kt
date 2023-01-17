@@ -1,15 +1,14 @@
 package kr.co.befamily.bemily.frgment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kr.co.befamily.bemily.R
 import kr.co.befamily.bemily.databinding.FragmentUserDetailBinding
@@ -19,7 +18,6 @@ import kr.co.befamily.bemily.db.dao.UsersDao
 class UserDetailFragment : Fragment() {
     private lateinit var binding: FragmentUserDetailBinding
     private val args: UserDetailFragmentArgs by navArgs()
-    private lateinit var callback: OnBackPressedCallback
     private lateinit var usersDao: UsersDao
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,7 +25,6 @@ class UserDetailFragment : Fragment() {
     ): View? {
         binding = FragmentUserDetailBinding.inflate(inflater, container, false)
         usersDao = UsersDatabase.getInstance(requireActivity()).usersDao
-        Log.e("UserDetailFragment", "${args.usersEntity}")
         return binding.root
     }
 
@@ -47,7 +44,7 @@ class UserDetailFragment : Fragment() {
         }
 
         binding.isLike.setOnClickListener {
-            GlobalScope.launch {
+            CoroutineScope(Dispatchers.IO).launch {
                 usersDao.updateIsLike(!args.usersEntity.is_like, args.usersEntity.login)
             }
 
