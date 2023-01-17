@@ -1,6 +1,8 @@
 package kr.co.befamily.bemily.repository
 
 import android.util.Log
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kr.co.befamily.bemily.db.UsersDatabase
@@ -35,7 +37,7 @@ class UsersRepository(private val usersApi: UsersApi, private val usersDao: User
             override fun onResponse(call: Call<List<UsersEntity>>, response: Response<List<UsersEntity>>) {
                 callback.onResponse(call, response)
                 Log.e("Response", "onResponse")
-                GlobalScope.launch {
+                CoroutineScope(Dispatchers.IO).launch {
                     usersDao.insertUsers(response.body()!!)
                 }
             }

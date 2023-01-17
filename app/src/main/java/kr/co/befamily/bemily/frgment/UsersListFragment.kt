@@ -10,12 +10,13 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import kr.co.befamily.bemily.adpater.db.UsersRecyclerViewDbAdapter
+import kr.co.befamily.bemily.adpater.UsersRecyclerViewMainAdapter
 import kr.co.befamily.bemily.databinding.FragmentUsersListBinding
 import kr.co.befamily.bemily.db.UsersDatabase
 import kr.co.befamily.bemily.db.entity.UsersEntity
 import kr.co.befamily.bemily.network.RetrofitInstance
 import kr.co.befamily.bemily.network.api.UsersApi
+import kr.co.befamily.bemily.network.vo.UsersGroupVo
 import kr.co.befamily.bemily.repository.UsersRepository
 import kr.co.befamily.bemily.viewmodel.UsersViewModel
 import kr.co.befamily.bemily.viewmodel.UsersViewModelFactory
@@ -23,7 +24,7 @@ import kr.co.befamily.bemily.viewmodel.UsersViewModelFactory
 class UsersListFragment : Fragment() {
     private lateinit var binding: FragmentUsersListBinding
     private lateinit var usersViewModel: UsersViewModel
-    private lateinit var usersRecyclerViewDbAdapter: UsersRecyclerViewDbAdapter
+    private lateinit var usersRecyclerViewMainAdapter: UsersRecyclerViewMainAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,7 +35,7 @@ class UsersListFragment : Fragment() {
         val usersRepository = UsersRepository(usersApi, usersDao)
         val usersViewModelFactory = UsersViewModelFactory(usersRepository)
         usersViewModel = ViewModelProvider(requireActivity(), usersViewModelFactory)[UsersViewModel::class.java]
-        usersRecyclerViewDbAdapter = UsersRecyclerViewDbAdapter(requireActivity(), usersDao)
+        usersRecyclerViewMainAdapter = UsersRecyclerViewMainAdapter(requireActivity(), usersDao)
         binding = FragmentUsersListBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -47,19 +48,33 @@ class UsersListFragment : Fragment() {
         })
 
         usersViewModel.usersLiveData.observe(viewLifecycleOwner, Observer {
-            usersRecyclerViewDbAdapter.submitList(it)
-        })
+            Log.e("usersLiveData", "$it")
+            val usersGroupList = mutableListOf<UsersGroupVo>()
+            val usersFavoriteGroupList = mutableListOf<UsersEntity>()
+            val usersHeaderGroupList = mutableListOf<UsersEntity>()
 
-        binding.recyclerView.adapter = usersRecyclerViewDbAdapter
-        usersRecyclerViewDbAdapter.setUsetsItemSelectListener(object : UsersRecyclerViewDbAdapter.UsersItemSelectEventListener {
-            override fun usersItemSelect(usersEntity: UsersEntity) {
-                Log.e("usersItemSelect", "$usersEntity")
+            it.forEach { usersEntity ->
+                if (usersEntity.is_like) {
+                    usersFavoriteGroupList.add(usersEntity)
+                } else {
+                    usersHeaderGroupList.add(usersEntity)
+                }
             }
+
+            if (usersFavoriteGroupList.size > 0) {
+                usersGroupList.add(UsersGroupVo("Favorite", usersFavoriteGroupList))
+            }
+
+            if (usersHeaderGroupList.size > 0) {
+                usersGroupList.add(UsersGroupVo("Normal", usersHeaderGroupList))
+            }
+
+            Log.e("usersLiveData", "$usersGroupList")
+            usersRecyclerViewMainAdapter.submitList(usersGroupList)
         })
 
+        binding.recyclerView.adapter = usersRecyclerViewMainAdapter
         val linearLayoutManager = LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
         binding.recyclerView.layoutManager = linearLayoutManager
-        val decoration = DividerItemDecoration(requireActivity(), linearLayoutManager.orientation)
-        binding.recyclerView.addItemDecoration(decoration)
     }
 }

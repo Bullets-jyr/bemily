@@ -1,5 +1,6 @@
 package kr.co.befamily.bemily.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import kr.co.befamily.bemily.db.entity.UsersEntity
@@ -28,6 +29,7 @@ class UsersViewModel(private val usersRepository: UsersRepository) : ViewModel()
 //    }
 
     fun reqUsersList(q: String) {
+        Log.d("reqUsersList", "reqUsersList")
         usersRepository.reqUsersList(q, object : Callback<List<UsersEntity>> {
             override fun onResponse(call: Call<List<UsersEntity>>, response: Response<List<UsersEntity>>) {
                 usersListLiveData.value = response.body()
